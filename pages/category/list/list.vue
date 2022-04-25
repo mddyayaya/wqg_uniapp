@@ -1,7 +1,7 @@
 <template>
     <view class="">
         <u-toast ref="uToast" /><u-no-network></u-no-network>
-        <u-navbar :title="title"></u-navbar>
+		<u-navbar :is-back="false" title="好物" :background="background" :title-color="titleColor"></u-navbar>
 		<swiper :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000">
 			<swiper-item>
 				<view class="swiper-item"></view>
@@ -10,6 +10,9 @@
 				<view class="swiper-item"></view>
 			</swiper-item>
 		</swiper>
+		<view class="slot-wrap">
+			<u-search  :show-action="true" shape="round" v-model="searchKey" action-text="搜索" placeholder="请输入搜索内容" @custom="goSearch" @search="goSearch" :action-style="actionStyle"></u-search>
+		</view>
         <!-- 条件筛选 -->
         <view class="u-row-center coreshop-bg-white">
             <u-dropdown ref="uDropdown">
@@ -176,6 +179,8 @@
         mixins: [goods],
         data() {
             return {
+                background: this.$coreTheme.mainNabBar.background,
+                titleColor: this.$coreTheme.mainNabBar.titleColor,
                 CustomBar: (this.CustomBar + 6) * 2,
                 title: '列表',
                 current: 0,
@@ -205,7 +210,7 @@
                         sort: 'asc'
                     }
                 },
-                searchKey: '请输入关键字搜索', //关键词
+                searchKey: '', //关键词
                 alllist: true,
                 allgrid: false,
                 screents: true,
