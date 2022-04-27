@@ -2,13 +2,14 @@
 	<view class="check-list" v-if="checkList.length > 0">
 		<u-tabs 
 			:current="current"
-			active-color="#bb0000"
-			inactive-color="#333"
+			active-color="#fff"
+			inactive-color="#999999"
 			:list="checkList" 
-			height="60rpx" 
-			bg-color="#fff"
-			@change="typeChange"
-			@click="selectType">
+			height="60rpx"
+			font-size="24rpx"
+			bgColor="rgb(38,46,57)"
+			@change="selectType"
+			@click="typeChange">
 			<view
 				slot="right"
 				style="padding-left: 4px;"
@@ -25,38 +26,45 @@
 			return{
 				current:0,
 				checkList: [{
-                    name: '关注',
-                }, {
-                    name: '推荐',
-                }, {
-                    name: '电影'
-                }, {
-                    name: '科技'
-                }, {
-                    name: '音乐'
-                }, {
-                    name: '美食'
-                }, {
-                    name: '文化'
-                }, {
-                    name: '财经'
-                }, {
-                    name: '手工'
+                    name: '推荐活动',
                 }]
 			}
 		},
 		props:{
-			// checkList:{
-			// 	type:Array,
-			// 	default:[]
-			// }
+			typeList:{
+				type:Array,
+				default:[]
+			}
+		},
+		watch:{
+			typeList(value){
+				let arr = []
+				value.forEach(item =>{
+					arr.push({name:item})
+				})
+				this.checkList = this.checkList.concat(arr);
+				this.$emit("recommendAvtivityList")
+			}
 		},
 		methods:{
 			selectType(e){
 				this.current = e
+				if(this.current == 0){
+					// 推荐活动
+					this.$emit("recommendAvtivityList")
+				}else{
+					this.$emit("initAvtivityList",this.checkList[e].name)
+				}
 			},
 			typeChange(e){
 				this.current = e
+				console.log(e)
+				if(this.current == 0){
+					// 推荐活动
+					this.$emit("recommendAvtivityList")
+				}else{
+					this.$emit("initAvtivityList",this.checkList[e].name)
+				}
 			}
 		}
 	}

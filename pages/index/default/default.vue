@@ -10,7 +10,17 @@
 
         <!--首页模块化组合组件-->
 		<!-- <view class="coreshopPage"> -->
-			<coreshopPage :coreshopdata="pageData"></coreshopPage>
+			<coreshopPage :coreshopdata="pageData" 
+			@initAvtivityList="initAvtivityList"
+			@recommendAvtivityList="recommendAvtivityList"
+			@nearbyStoreList="nearbyStoreList"
+			:nearbySlider="nearbySlider"
+			:nearbyData1="nearbyData1"
+			:nearbyData2="nearbyData2"
+			:nearbyData3="nearbyData3"
+			:recommendListData="recommendListData"
+			:typeList="typeList"
+			:mainActivityData="mainActivityData"></coreshopPage>
 		<!-- </view> -->
         <!--版权组件-->
         <copyright></copyright>
@@ -29,6 +39,7 @@
     import copyright from '@/components/coreshop-copyright/coreshop-copyright.vue';
     import modalImg from '@/components/coreshop-modal-img/coreshop-modal-img.vue';
     import { goods } from '@/common/mixins/mixinsHelper.js';
+	let that;
     export default {
         mixins: [goods],
         components: {
@@ -40,7 +51,13 @@
             return {
                 background: this.$coreTheme.mainNabBar.background,
                 titleColor: this.$coreTheme.mainNabBar.titleColor,
-
+				recommendListData:[],
+				typeList:[],
+				nearbyStoreListData:[],
+				nearbySlider:"",
+				nearbyData1:"",
+				nearbyData2:"",
+				nearbyData3:"",
                 swiperItems: [],
                 currentIndex: 0,
                 opacity: 0,
@@ -77,7 +94,8 @@
                 }
             },
             appTitle() {
-                this.homeTitle = this.$store.state.config.shopName;
+                // this.homeTitle = this.$store.state.config.shopName;
+                this.homeTitle = "文沁阁";
                 return this.homeTitle;
             },
             // 获取店铺联系人手机号
@@ -86,8 +104,8 @@
             }
         },
         onLoad(e) {
+			that = this;
             this.initData();
-            console.log("数据：" + this.$globalConstVars.apiFilesUrl);
         },
         methods: {
             about() {
@@ -107,6 +125,54 @@
                     url: '/pages/search/search'
                 });
             },
+			// 获取活动列表
+			initAvtivityList(typeId){
+				// 获取活动列表
+				this.recommendListData = []
+				this.$u.api.mainActivity({
+					where: '{activitycategory:'+typeId+'}'
+				}).then(res => {
+					if (res.code == 0) {
+						this.recommendListData = res.data;
+					}
+					setTimeout(function () {
+						uni.hideLoading();
+					}, 1000);
+				})
+			},
+			recommendAvtivityList(){
+				// 获取推荐活动信息
+				this.recommendListData = []
+				this.$u.api.mainRecommendList().then(res => {
+					if (res.code == 0) {
+						this.recommendListData = res.data;
+					}
+					setTimeout(function () {
+						uni.hideLoading();
+					}, 1000);
+				})
+			},
+			nearbyStoreList(code){
+				this.nearbyStoreListData = []
+				this.$u.api.mainNearbyStoreList({
+					codes:code
+				}).then(res => {
+					if (res.code == 0) {
+						if(code == 'TplSlider'){
+							that.nearbySlider = res.data.tplSlider
+						}else if(code == "TplIndexBanner1"){
+							that.nearbyData1 = res.data.tplIndexBanner1
+						}else if(code == "TplIndexBanner2"){
+							that.nearbyData2 = res.data.tplIndexBanner2
+						}else if(code == "TplIndexBanner3"){
+							that.nearbyData3 = res.data.tplIndexBanner3
+						}
+					}
+					setTimeout(function () {
+						uni.hideLoading();
+					}, 1000);
+				})
+			},
             // 首页初始化获取数据
             initData() {
                 uni.showLoading({
@@ -116,7 +182,6 @@
                 this.$u.api.getPageConfig({ code: this.pageCode }).then(res => {
                     if (res.status == true) {
                         this.pageData = res.data.items;
-
                         if (res.data.items.length > 0) {
                             for (var i = 0; i < res.data.items.length; i++) {
                                 if (res.data.items[i].widgetCode == 'topImgSlide') {
@@ -141,7 +206,14 @@
                         uni.hideLoading();
                     }, 1000);
                 });
-
+				// 类型列表
+				uni.request({
+					url:"http://wqgapi.jdctd.com:20019/static/ActiveType.json",
+					method:"GET",
+					success(res) {
+						that.typeList = res.data.type
+					}
+				})
                 var _this = this;
                 if (this.$db.get('userToken')) {
                     this.$u.api.userInfo().then(res => {

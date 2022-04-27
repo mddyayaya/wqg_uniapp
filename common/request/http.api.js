@@ -1,4 +1,4 @@
-﻿
+
 // 此处第二个参数vm，就是我们在页面使用的this，你可以通过vm获取vuex等操作，更多内容详见uView对拦截器的介绍部分：
 // https://uviewui.com/js/http.html#%E4%BD%95%E8%B0%93%E8%AF%B7%E6%B1%82%E6%8B%A6%E6%88%AA%EF%BC%9F
 const install = (Vue, vm) => {
@@ -240,8 +240,15 @@ const install = (Vue, vm) => {
     let groupInfo = (params = {}) => vm.$u.post('/Api/Group/GetGoodsDetial', params, { method: 'group.getgoodsdetial', needToken: false });
     // 自定义页面
     let getPageConfig = (params = {}) => vm.$u.post('/Api/Page/GetPageConfig', params, { method: 'pages.getpageconfig', needToken: false });
-
-
+	// 首页根据类型查找相关活动
+    let mainActivity = (params = {}) => vm.$u.post('/Api/WqgMain/PostActivityList', params, { method: 'main.postactivitylist', needToken: false });
+	// 首页获取推荐活动信息
+    let mainRecommendList = (params = {}) => vm.$u.post('/Api/WqgMain/PostRecommendList', params, { method: 'main.postrecommendlist', needToken: false });
+	// 首页获取类型列表
+    let mainTypeList = (params = {}) => vm.$u.post('/static/ActiveType.json', params, { method: 'main.typelist', needToken: false });
+	// 首页根据经纬度查询附近门店
+    let mainNearbyStoreList = (params = {}) => vm.$u.post('/Api/Advert/GetPositionList', params, { method: 'main.postactivitylist', needToken: false });
+	
     // 获取分销商进度状态
     let getDistributionInfo = (params = {}) => vm.$u.post('/Api/Distribution/Info', params, { method: 'distribution_center-api-info', needToken: true });
     // 申请分销商
@@ -499,6 +506,10 @@ const install = (Vue, vm) => {
         getGroup,
         groupInfo,
         getPageConfig,
+		mainActivity,
+		mainRecommendList,
+		mainTypeList,
+		mainNearbyStoreList,
 
         getDistributionInfo,
         applyDistribution,

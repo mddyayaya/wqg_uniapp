@@ -1,24 +1,23 @@
 <template>
     <view class="goods_list">
-       <view class="goods_list_item" v-for="item in 6" @click="goSigin">
-			<u-lazy-load class="item_image" :image="item.src"></u-lazy-load>
+       <view class="goods_list_item" v-for="item in recommendListData" @click="goSigin">
+			<u-lazy-load class="item_image" :image="item.thumbnail"></u-lazy-load>
 			<view class="item_text_wrap">
 				<view class="item_title u-line-2">
-					文沁阁---图书参观活动文沁阁图书参观活动文沁阁图书参观活动文沁阁图书参观活动文沁阁
+					{{item.title}}
 				</view>
 				<view class="item_time">
-					2022-11-25至2021-12-30 10:00-17:00
+					{{item.startTime}}
 				</view>
 				<view class="item_address">
-					地点：北京东城区
-				</view>
-				<view class="item_price">
-					¥68起
+					{{item.activityaddress}}
 				</view>
 				<view class="item_bottom_bar">
-					<view class="item_has_nohss"></view>
+					<view class="item_price">
+						价格：<text>¥{{item.money}}</text>
+					</view>
 					<view class="item_haseen">
-						4596人看过
+						{{item.amount}}人看过
 					</view>
 				</view>
 			</view>
@@ -28,15 +27,17 @@
 
 <script>
     export default {
+        name: "coreshopgoods",
+        props: {
+			recommendListData:{
+				type:Array,
+				default:[]
+			}
+        },
         data() {
             return {
                 current: 0,
             };
-        },
-        filters: {
-        },
-        name: "coreshopgoods",
-        props: {
         },
         computed: {
         },
@@ -53,38 +54,56 @@
 <style scoped lang="scss">
 	.goods_list{
 		width: 100%;
-		background-color: #fff;
-		padding: 20rpx;
+		padding: 23rpx;
+		margin-top: 15rpx;
 		box-sizing: border-box;
 		&_item{
-			margin-top: 28rpx;
-			width: 100%;
-			height: 240rpx;
+			margin: 0 30rpx 31rpx 30rpx;
+			padding: 20rpx 0;
+			background-color: #2B323B;
+			transform: skew(-20deg);
+			box-shadow: 7rpx 8rpx 19rpx 2rpx rgba(0, 0, 0, 0.19);
+			border-radius: 10rpx;
 			display: flex;
 			justify-content: space-between;
 			.item_image{
 				overflow: hidden;
-				width: 340rpx;
-				height: 100%;
+				transform: skew(40deg);
+				overflow: hidden;
+				width: 220rpx;
+				height: 160rpx;
 				border-radius: 20rpx;
-				margin-right: 20rpx;
 			}
 			.item_text_wrap{
+				transform: skew(20deg);
 				flex: 1;
-				font-size: 24rpx;
-				color: #333333;
+				margin-left: 46rpx;
+				color: #fff;
 				.item_title{
-					font-weight: bold;
-					color: #000;
+					font-size: 26rpx;
+					overflow: hidden;
 					font-weight: bold;
 				}
 				.item_time{
-					margin-top: 5rpx;
+					margin-top: 13rpx;
+				}
+				.item_address{
+					margin-top: 13rpx;
 				}
 				.item_bottom_bar{
+					font-size: 20rpx;
+					margin-top: 13rpx;
 					display: flex;
-					justify-content: space-between;
 					align-items: center;
+					.item_price{
+						text{
+							color: #02B9EE;
+							font-size: 30rpx;
+						}
+					}
+					.item_haseen{
+						margin-left: 90rpx;
+					}
 				}
 			}
 		}

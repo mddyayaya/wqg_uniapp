@@ -1,64 +1,36 @@
 <template>
     <view>
         <block v-for="(item,index) in coreshopdata" :key="index">
-            <!--搜索（修复）-->
-            <!-- <coreshopsearch :coreshopdata="item" v-if="item.widgetCode=='search' "></coreshopsearch> -->
             <!--图片轮播（修复）-->
             <coreshopimgSlide :coreshopdata="item" v-if="item.widgetCode=='imgSlide' "></coreshopimgSlide>
             <!--公告（修复）-->
             <coreshopnotice :coreshopdata="item" v-if="item.widgetCode=='notice' "></coreshopnotice>
-			<!-- 选项卡 -->
-            <coreshopChecklist :coreshopdata="item" v-if="item.widgetCode=='imgWindow' "></coreshopChecklist>
-            <!--商品（修复）-->
-            <coreshopgoods :coreshopdata="item" v-if="item.widgetCode=='goods' "></coreshopgoods>
-            <!--优惠券（修复）-->
-            <!-- <coreshopcoupon :coreshopdata="item" v-if="item.widgetCode=='coupon' "></coreshopcoupon> -->
-            <!--空格（修复）-->
-            <!-- <coreshopblank :coreshopdata="item" v-if="item.widgetCode=='blank' "></coreshopblank> -->
-            <!--多行文本输入区（修复）-->
-            <!-- <coreshoptextarea :coreshopdata="item" v-if="item.widgetCode=='textarea' "></coreshoptextarea> -->
-            <!--视频（修复）-->
-            <!-- <coreshopvideo :coreshopdata="item" v-if="item.widgetCode=='video' "></coreshopvideo> -->
-            <!--图片集（修复）-->
-            <!-- <coreshopimgWindow :coreshopdata="item" v-if="item.widgetCode=='imgWindow' "></coreshopimgWindow> -->
-            <!--图片--（修复）-->
-            <!-- <coreshopimgSingle :coreshopdata="item" v-if="item.widgetCode=='imgSingle' "></coreshopimgSingle> -->
-            <!--商品选项卡（修复）-->
-            <!-- <coreshopgoodTabBar :coreshopdata="item" v-if="item.widgetCode=='goodTabBar' "></coreshopgoodTabBar> -->
-            <!--文章（修复）-->
-            <!-- <coreshoparticle :coreshopdata="item" v-if="item.widgetCode=='article' "></coreshoparticle> -->
-            <!--文章分类（修复）-->
-            <!-- <coreshoparticleClassify :coreshopdata="item" v-if="item.widgetCode=='articleClassify' "></coreshoparticleClassify> -->
-            <!--宫格自定义导航（修复）-->
-            <!-- <coreshopnavBar :coreshopdata="item" v-if="item.widgetCode=='navBar' "></coreshopnavBar> -->
-            <!--团购（修复）-->
-            <!-- <coreshopgroupPurchase :coreshopdata="item" v-if="item.widgetCode=='groupPurchase' "></coreshopgroupPurchase> -->
-            <!--浏览记录（修复）-->
-            <!-- <coreshoprecord :coreshopdata="item" v-if="item.widgetCode=='record' "></coreshoprecord> -->
-            <!--拼团（修复）-->
-            <!-- <coreshoppinTuan :coreshopdata="item" v-if="item.widgetCode=='pinTuan' "></coreshoppinTuan> -->
-            <!--服务（修复）-->
-            <!-- <coreshopservice :coreshopdata="item" v-if="item.widgetCode=='service' "></coreshopservice> -->
-            <!--弹窗广告-->
-            <!-- <coreshopadpop :coreshopdata="item" v-if="item.widgetCode=='adpop' "></coreshopadpop> -->
-            <!--文本内容（修复）-->
-            <!-- <coreshopContent :coreshopdata="item" v-if="item.widgetCode=='content' "></coreshopContent> -->
         </block>
+		<!-- 选项卡 -->
+		<coreshopChecklist :typeList="typeList" 
+		@recommendAvtivityList="recommendAvtivityList"
+		@initAvtivityList="initAvtivityList"></coreshopChecklist>
+		<!--活动列表-->
+		<coreshopgoods :recommendListData="recommendListData"></coreshopgoods>
+		<!--场地-->
+		<coreshoparea @nearbyStoreList="nearbyStoreList" :nearbyStoreListData="nearbyStoreListData"></coreshoparea>
     </view>
 </template>
 
 <script>
     import coreshopimgSlide from '@/components/coreshop-page/coreshop-imgSlide.vue'
-    import coreshopChecklist from '@/components/coreshop-page/coreshop-checklist.vue'
-    import coreshopsearch from '@/components/coreshop-page/coreshop-search.vue'
     import coreshopnotice from '@/components/coreshop-page/coreshop-notice.vue'
+    import coreshopChecklist from '@/components/coreshop-page/coreshop-checklist.vue'
+    import coreshopgoods from '@/components/coreshop-page/coreshop-goods.vue'
+    import coreshoparea from '@/components/coreshop-page/coreshop-area.vue'
+	
+    import coreshopsearch from '@/components/coreshop-page/coreshop-search.vue'
     import coreshopcoupon from '@/components/coreshop-page/coreshop-coupon.vue'
     import coreshopblank from '@/components/coreshop-page/coreshop-blank.vue'
     import coreshoptextarea from '@/components/coreshop-page/coreshop-textarea.vue'
     import coreshopvideo from '@/components/coreshop-page/coreshop-video.vue'
     import coreshopimgWindow from '@/components/coreshop-page/coreshop-imgWindow.vue'
     import coreshopimgSingle from '@/components/coreshop-page/coreshop-imgSingle.vue'
-    import coreshopgoods from '@/components/coreshop-page/coreshop-goods.vue'
     import coreshopgoodTabBar from '@/components/coreshop-page/coreshop-goodTabBar.vue'
     import coreshoparticle from '@/components/coreshop-page/coreshop-article.vue'
     import coreshoparticleClassify from '@/components/coreshop-page/coreshop-articleClassify.vue'
@@ -84,6 +56,7 @@
             coreshopimgWindow,
             coreshopimgSingle,
             coreshopgoods,
+			coreshoparea,
             coreshopgoodTabBar,
             coreshoparticle,
             coreshoparticleClassify,
@@ -97,12 +70,58 @@
             coreshopContent,
 			coreshopChecklist
         },
+		methods:{
+			recommendAvtivityList(){
+				this.$emit("recommendAvtivityList")
+			},
+			initAvtivityList(typeId){
+				this.$emit("initAvtivityList",typeId)
+			},
+			nearbyStoreList(code){
+				this.$emit("nearbyStoreList",code)
+			}
+		},
         props: {
             coreshopdata: {
                 default: function () {
                     return []
                 }
-            }
+            },
+            recommendListData: {
+                default: function () {
+                    return []
+                }
+            },
+            mainActivityData: {
+                default: function () {
+                    return []
+                }
+            },
+			typeList:{
+                default: function () {
+                    return []
+                },
+			},
+			nearbySlider:{
+                default: function () {
+                    return []
+                },
+			},
+			nearbyData1:{
+                default: function () {
+                    return []
+                },
+			},
+			nearbyData2:{
+                default: function () {
+                    return []
+                },
+			},
+			nearbyData3:{
+                default: function () {
+                    return []
+                },
+			}
         }
     }
 </script>
