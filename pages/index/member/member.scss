@@ -1,6 +1,7 @@
-﻿.memberBox {
-    .headBox { padding-top: 0; padding-bottom: 72.72rpx; background-image: url('/static/images/common/bg.png'); background-size: cover; background-position: center;
-        .user-info-box { padding-top: 30rpx;
+.memberBox {
+	padding: 30rpx 30rpx;
+    .headBox { padding-top: 0;margin-bottom: 30rpx;
+        .user-info-box {
             .login-user-view { position: relative; text-align: center;
                 .login-user-avatar-view { position: relative; margin-bottom: 18.18rpx; }
             }
@@ -11,7 +12,7 @@
         }
     }
 }
-.coreshop-view-content { padding: 0 27.27rpx 54.54rpx; margin-top: -63.63rpx;
+.coreshop-view-content { padding: 0 27.27rpx 54.54rpx; 
     .coreshop-user-info-order-box { border-radius: 18.18rpx;
         .coreshop-list {
             &.grid {
@@ -39,7 +40,9 @@
             }
         }
     }
-    .coreshop-user-info-tools-box { border-radius: 18.18rpx;
+    .coreshop-user-info-tools-box { 
+		min-height: 297rpx;
+		border-radius: 18.18rpx;
         .tools-view { position: relative;
             .tools-title { padding-right: 81.81rpx; }
             .tools-right { position: absolute; right: 9.09rpx; bottom: 23.63rpx; }
@@ -51,11 +54,18 @@
     &:after { position: absolute; background: #dddddd; top: 10.45rpx; width: 1.81rpx; right: -12.72rpx; height: 16.36rpx; content: " "; }
 }
 .u-tips-color { color: #909399; }
-.userItem { padding: 16rpx 10rpx 0rpx 10rpx; height: 140rpx; -webkit-box-pack: end; -webkit-justify-content: flex-end; justify-content: flex-end; -webkit-box-align: center; -webkit-align-items: center; align-items: center; }
+.userItem { padding: 0 10rpx 0rpx 10rpx; height: 140rpx; -webkit-box-pack: end; -webkit-justify-content: flex-end; justify-content: flex-end; -webkit-box-align: center; -webkit-align-items: center; align-items: center; }
 
 .account-face { height: 60px; width: 60px; flex: 0 0 60px; background-color: transparent; border-radius: 500px; display: -webkit-inline-box; display: -webkit-inline-flex; display: inline-flex; -webkit-box-align: center; -webkit-align-items: center; align-items: center; -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center; font-size: 28rpx; color: #606266; -webkit-border-radius: 10px; border-radius: 10px; position: relative; }
 .yqhy { background-image: url(/static/images/my/1.png); }
 .yqhy2 { background-image: url(/static/images/my/2.png); }
 
 
-.grid-text { font-size: 28rpx; margin-top: 14rpx; color: $core-type-info; }
+.grid-text { font-size: 28rpx; margin-top: 14rpx; color: #fff; }
+.advanter{
+	width: 100%;
+	height: 196rpx;
+	margin-top: 40rpx;
+	background-color: #ededed;
+	border-radius: 30rpx;
+}

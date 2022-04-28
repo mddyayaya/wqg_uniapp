@@ -1,79 +1,74 @@
 <template>
 	<view class="area-wrap">
-		<view class="title">
+		<view class="titleBg">
 			<view>场地</view>
 			<view class="zicheng"></view>
 		</view>
 		<view class="area-swipers">
-			<!-- <u-swiper >
-			</u-swiper> -->
-			<view class="area-swipers-top">
-				<image :src="nearbySlider[0].imageUrl" mode=""></image>
-			</view>
-			<view class="area-swipers-center">
-				<image src="../../static/images/common/main_logo.png" mode=""></image>
-			</view>
-			<view class="area-swipers-center1">
-				{{nearbyStoreListData[0].storeName}}
-			</view>
-			<view class="area-swipers-center_line">
-				<image src="../../static/images/common/main_line.png" mode="widthFix"></image>
-			</view>
-			<view class="area-swipers-center_images">
-				<view class="images_item" >
-					<view class="gou">
-						<image src="../../static/images/common/main_icon1.png" mode=""></image>
+			<swiper class="area-swipers" 
+			easing-function="easeInOutCubic"
+			:indicator-dots="false" :autoplay="false" :interval="1000" :duration="500">
+				<swiper-item v-for="item in 3">
+					<view class="area-swipers-top">
+						<image src="" mode=""></image>
 					</view>
-					<view class="images">
-						<u-lazy-load class="item_image" :image="item.thumbnail"></u-lazy-load>
+					<view class="area-swipers-center">
+						<image src="@/static/images/common/main_logo.png" mode="widthFix"></image>
 					</view>
-				</view>
-			</view>
+					<view class="area-swipers-center1">
+						南山公馆
+					</view>
+					<view class="area-swipers-center_line">
+						<image src="@/static/images/common/main_line.png" mode="widthFix"></image>
+					</view>
+					<view class="area-swipers-center_images">
+						<view class="images_item" v-for="item in 3">
+							<view class="gou">
+								<image src="@/static/images/common/main_icon1.png" mode="widthFix"></image>
+							</view>
+							<view class="images">
+								<image src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2F4k%2Fs%2F02%2F2109242332225H9-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1653708791&t=db57545485baf03b586db7783aad9e48" mode="widthFix"></image>
+							</view>
+						</view>
+					</view>
+				</swiper-item>
+			</swiper>
 		</view>
 	</view>
 </template>
 
 <script>
 	let that;
+	import Swiper from 'swiper'
 	export default{
 		data(){
 			return{
-				list: [{
-					image: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
-					title: '昨夜星辰昨夜风，画楼西畔桂堂东'
-				},
-				{
-					image: 'https://cdn.uviewui.com/uview/swiper/2.jpg',
-					title: '身无彩凤双飞翼，心有灵犀一点通'
-				},
-				{
-					image: 'https://cdn.uviewui.com/uview/swiper/3.jpg',
-					title: '谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳'
-				}
-			],
+				list: [],
 			}
 		},
 		props:{
-			nearbySlider:{
-                default: function () {
-                    return []
-                },
-			},
 			nearbyData1:{
                 default: function () {
                     return []
                 },
-			},
-			nearbyData2:{
-                default: function () {
-                    return []
-                },
-			},
-			nearbyData3:{
-                default: function () {
-                    return []
-                },
 			}
+		},
+		watch:{
+			nearbyData1:{
+				handler(val){
+					val.forEach(item => {
+						that.list.push({
+							image:item.imageUrl
+						})
+					})
+				},
+				deep:true
+			}
+		},
+		mounted() {
+			new Swiper('.swiper',{
+				loop:true
+			})
 		},
 		created() {
 			that = this;
@@ -82,16 +77,14 @@
 		methods:{
 			// 获取当前经纬度
 			getCurrentLocation(){
-				that.$emit("nearbyStoreList","TplSlider")
 				that.$emit("nearbyStoreList","TplIndexBanner1")
-				that.$emit("nearbyStoreList","TplIndexBanner2")
-				that.$emit("nearbyStoreList","TplIndexBanner3")
 			}
 		}
 	}
 </script>
 
 <style lang="scss">
+	@import  'swiper/swiper.scss';
 	.area-wrap{
 		box-sizing: border-box;
 		padding: 0 26rpx;
@@ -113,6 +106,7 @@
 		}
 		.area-swipers{
 			margin-top: 15rpx;
+			height: 550rpx;
 			width: 100%;
 			background-color: #000;
 			border-radius: 10rpx;
@@ -121,7 +115,6 @@
 			.area-swipers-top{
 				width: 100%;
 				height: 219rpx;
-				background-color: #ededed;
 				image{
 					width: 100%;
 					height: 100%;
@@ -161,8 +154,8 @@
 					position: relative;
 					width: 210rpx;
 					height: 160rpx;
-					background-color: #333;
 					.gou{
+						z-index: 10;
 						position: absolute;
 						height: 72rpx;
 						width: 29rpx;
@@ -172,39 +165,91 @@
 						}
 					}
 					.images{
+						overflow: hidden;
 						position: absolute;
 						width: 100%;
 						height: 100%;
 						left: 0;
 						top: 0;
-						
+						image{
+							width: 100%;
+							height: 100%;
+						}
 					}
 				}
 				.images_item:last-child{
-					transform: rotate(-10deg) translateY(-10rpx);
+					.images{
+						animation: jump1 3s infinite linear ;
+					}
 					.gou{
 						top: -20rpx;
 						right: 10rpx;
-						transform: rotate(10deg)
+						transform: rotate(10deg) translateY(-10rpx);
 					}
 				}
 				.images_item:nth-child(1){
-					transform: rotate(10deg) translateY(-10rpx);
+					.images{
+						animation: jump 3s infinite linear ;
+					}
 					.gou{
-						top: -20rpx;
-						left: 10rpx;
-						transform: rotate(10deg)
+						top: -40rpx;
+						left: 30rpx;
+						transform: rotate(10deg) translateY(-10rpx);
 					}
 				}
 				.images_item:nth-child(2){
-					transform: scale(0.95);
+					.images{
+						animation: jump2 3s infinite linear ;
+					}
 					.gou{
 						top: -20rpx;
 						left: 50%;
-						transform: translateX(-50%);
+						transform: translateX(-50%) scale(0.95);
 					}
 				}
 			}
+		}
+	}
+	
+	@keyframes jump{
+		0%{
+			transform: rotate(10deg)  translateY(-10rpx);
+		}
+		50%{
+			transform: rotate(13deg)  translateY(-10rpx);
+		}
+		100%{
+			transform: rotate(10deg)  translateY(-10rpx);
+		}
+	}
+	
+	@keyframes jump1{
+		0%{
+			transform: rotate(-10deg)  translateY(-10rpx);
+		}
+		50%{
+			transform: rotate(-13deg)  translateY(-10rpx);
+		}
+		100%{
+			transform: rotate(-10deg)  translateY(-10rpx);
+		}
+	}
+	
+	@keyframes jump2{
+		0%{
+			transform: rotate(0deg)  translateY(5rpx) scale(0.95);
+		}
+		25%{
+			transform: rotate(-3deg)  translateY(5rpx) scale(0.95);
+		}
+		50%{
+			transform: rotate(0deg)  translateY(5rpx) scale(0.95);
+		}
+		75%{
+			transform: rotate(3deg)  translateY(5rpx) scale(0.95);
+		}
+		100%{
+			transform: rotate(0deg)  translateY(5rpx) scale(0.95);
 		}
 	}
 </style>

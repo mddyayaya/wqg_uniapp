@@ -1,8 +1,7 @@
 <template>
     <view class="swipers">
         <u-swiper 
-		img-mode="scaleToFill"
-		height="424rpx"
+		height="424"
 		:list="swiperItems" :effect3d="false" :title="false" @click="taped" bg-color="transparency"></u-swiper>
         <u-toast ref="uToast" />
     </view>
@@ -107,7 +106,6 @@
 <style lang="scss">
 	.swipers{
 		height: 424rpx;
-		margin-bottom: 27rpx;
 	}
 </style>
 

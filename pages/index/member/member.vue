@@ -11,48 +11,34 @@
             <view class="user-info-box">
                 <!--未登陆-->
                 <view class="login-user-view" v-if="!hasLogin">
-                    <!-- #ifdef H5 || APP-PLUS -->
-                    <view class="login-user-avatar-view">
-                        <u-avatar :src="$store.state.config.shopLogo" size="large"></u-avatar>
-                    </view>
-                    <u-button type="default" size="mini" @click="toLogin()">立即登录</u-button>
-                    <!-- #endif -->
-                    <!-- #ifdef MP-WEIXIN -->
-                    <view class="login-user-avatar-view">
-                        <view class="account-face grace-box-shadow">
-                            <open-data type="userAvatarUrl"></open-data>
-                        </view>
-                    </view>
-                    <u-button type="default" size="mini" @click="goLogin()">立即登录</u-button>
-                    <!-- #endif -->
-                    <!-- #ifdef MP-ALIPAY -->
-                    <view class="login-user-avatar-view">
-                        <u-avatar :src="userInfo.avatarImage" size="large"></u-avatar>
-                    </view>
-                    <u-button type="default" size="mini" @click="goLogin()">立即登录</u-button>
-                    <!-- #endif -->
-                    <!-- #ifdef MP-TOUTIAO -->
-                    <view class="login-user-avatar-view">
-                        <u-avatar :src="$store.state.config.shopLogo" size="large"></u-avatar>
-                    </view>
-                    <u-button type="default" size="mini" @click="goLogin()">立即登录</u-button>
-                    <!-- #endif -->
+                   <view class="login-user-avatar-view">
+                       <view class="account-face grace-box-shadow">
+                           <open-data type="userAvatarUrl"></open-data>
+                       </view>
+                   </view>
                 </view>
 
                 <!--已登陆-->
                 <view v-else>
                     <view class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30">
-                        <view class="u-m-r-10">
-                            <u-avatar :src="userInfo.avatarImage" size="96"></u-avatar>
+                        <view class="u-avatar">
+                            <u-avatar :src="userInfo.avatarImage" size="155"></u-avatar>
                         </view>
                         <view class="u-flex-1 userItem">
-                            <view class="u-font-34 u-p-b-20">
-                                <text class="u-margin-right-30">{{ userInfo.nickName }}</text>
-                                <!-- <text class="u-font-24">{{ userInfo.gradeName }}</text> -->
+                            <view class="u-font-34 u-p-b-20 u-flex-1">
+                                <text class="u-margin-right-10">{{ userInfo.nickName }}</text>
+								<u-icon :name="require('@/static/images/common/levels.png')" 
+								:size="20"  color="#fff"></u-icon>
                             </view>
-                            <view class="u-font-24">
-                                <text class="">积分 {{ userInfo.point }}</text>
-                                <!-- <text>余额 {{ userInfo.balance }}</text> -->
+                            <view class="u-font-24 u-p-b-20 u-flex-1">
+								<u-icon class="u-p-r-10" :name="require('@/static/images/common/phone.png')" 
+								:size="30"  color="#fff"></u-icon>
+                                <text class=""> {{ userInfo.phone }}</text>
+                            </view>
+                            <view class="u-font-24 u-flex-1">
+								<u-icon  class="u-p-r-10 " :name="require('@/static/images/common/count.png')" 
+								:size="30"  color="#fff"></u-icon>
+                                <text class=""> {{ userInfo.point }}</text>
                             </view>
                         </view>
                         <!-- #ifndef MP-WEIXIN -->
@@ -75,153 +61,66 @@
                     </view>
                 </view>
             </view>
-
-            <!--用户数据-->
-
-            <view class="user-info-num-box">
-                <u-grid :col="4" :border="false" :bg-color="transparent">
-                    <u-grid-item bg-color="transparent" @tap="navigateToHandle('/pages/member/setting/subscription/index')" :custom-style="{padding: '5rpx 0'}">
-                        <view class="u-font-36" v-if="!hasLogin">-</view>
-                        <view class="u-font-36" v-else>{{ userInfo.userCouponCount }}</view>
-                        <text class="u-font-22">消息中心</text>
-                    </u-grid-item>
-                    <u-grid-item bg-color="transparent" @click="orderNavigateHandle('/pages/member/order/index/index', 0)" :custom-style="{padding: '5rpx 0'}">
-                        <view class="u-font-36" v-if="!hasLogin">-</view>
-                        <view class="u-font-36" v-else>{{ userInfo.orderCount }}</view>
-                        <text class="u-font-22">我的订单</text>
-                    </u-grid-item>
-                    <u-grid-item bg-color="transparent" @tap="navigateToHandle('/pages/member/collection/index')" :custom-style="{padding: '5rpx 0'}">
-                        <view class="u-font-36" v-if="!hasLogin">-</view>
-                        <view class="u-font-36" v-else>{{ userInfo.collectionCount }}</view>
-                        <text class="u-font-22">我的收藏</text>
-                    </u-grid-item>
-                    <u-grid-item bg-color="transparent" @tap="navigateToHandle('/pages/member/history/index')" :custom-style="{padding: '5rpx 0'}">
-                        <view class="u-font-36" v-if="!hasLogin">-</view>
-                        <view class="u-font-36" v-else>{{ userInfo.footPrintCount }}</view>
-                        <text class="u-font-22">足迹</text>
-                    </u-grid-item>
-                </u-grid>
-            </view>
         </view>
 
         <view class="coreshop-view-content">
             <!--用户数据-->
-            <!-- <view class="u-padding-10 coreshop-bg-white coreshop-user-info-order-box">
-                <view class="coreshop-text-black u-font-lg coreshop-text-bold u-padding-20"></view>
-                <u-grid :col="5" :border="false">
-                    <u-grid-item v-for="(item, index) in orderItems" :key="index" @click="orderNavigateHandle('/pages/member/order/index/index', index)">
-                        <view class="transactionNumber" v-if="hasLogin">{{ item.nums }}</view>
-                        <u-icon :name="item.icon" :size="50" v-else></u-icon>
-                        <view class="grid-text">{{ item.name }}</view>
-                    </u-grid-item>
-                </u-grid>
-            </view> -->
-
-            <!--天天有钱-->
-            <!-- <view class="u-padding-10 coreshop-bg-white u-margin-top-30 coreshop-user-info-money-box" v-if="other.invite.showItem">
-                <view class="coreshop-text-black u-font-lg coreshop-text-bold u-padding-20">天天有钱</view>
-                <u-row gutter="16" class="money-col">
-                    <u-col span="6">
-                        <view class="money-item">
-                            <view class="money-item-view" @click="navigateToHandle('/pages/member/invite/index')">
-                                <view class="money-avatar coreshop-avatar lg yqhy" />
-                                <view class="money-content">
-                                    <view class="coreshop-text-black u-line-1">边逛边赚钱</view>
-                                    <view class="coreshop-text-gray u-font-sm u-line-1">最高提现20元</view>
-                                </view>
-                            </view>
-                        </view>
-                    </u-col>
-                    <u-col span="6">
-                        <view class="money-item">
-                            <view class="money-item-view" @click="navigateToHandle('/pages/member/invite/index')">
-                                <view class="money-avatar coreshop-avatar lg yqhy2" />
-                                <view class="money-content">
-                                    <view class="coreshop-text-black u-line-1">邀请好友</view>
-                                    <view class="coreshop-text-gray u-font-sm u-line-1">最高分红50000</view>
-                                </view>
-                            </view>
-                        </view>
-                    </u-col>
-                </u-row>
-            </view> -->
-
-            <!--我的服务-->
             <view class="u-padding-10 coreshop-bg-white u-margin-top-30 coreshop-user-info-tools-box">
-                <view class="u-padding-20 tools-view">
-                    <view class="coreshop-text-black coreshop-text-bold u-font-lg tools-title">常用工具</view>
+                <view class="coreshop-tools-list-box">
+                    <u-grid :col="4" :border="false" :bg-color="transparent">
+                        <u-grid-item 
+						bgColor="rgba(0,0,0,0)"
+						@tap="navigateToHandle('/pages/member/setting/subscription/index')">
+							<u-icon name="home" :size="50"  color="#fff"></u-icon>
+                            <text class="grid-text">消息中心</text>
+                        </u-grid-item>
+                        <u-grid-item 
+						bgColor="rgba(0,0,0,0)"
+						@click="orderNavigateHandle('/pages/member/order/index/index', 0)">
+							<u-icon name="order" :size="50"  color="#fff"></u-icon>
+                           <text class="grid-text">我的订单</text>
+                        </u-grid-item>
+                        <u-grid-item 
+						bgColor="rgba(0,0,0,0)"
+						 @tap="navigateToHandle('/pages/member/collection/index')">
+							<u-icon name="star" :size="50"  color="#fff"></u-icon>
+                            <text class="grid-text">我的收藏</text>
+                        </u-grid-item>
+                        <u-grid-item 
+						bgColor="rgba(0,0,0,0)"
+						@tap="navigateToHandle('/pages/member/history/index')">
+							<u-icon :name="require('@/static/images/common/foot.png')" :size="30"  color="#fff"></u-icon>
+                           <text class="grid-text">足迹</text>
+                        </u-grid-item>
+                    </u-grid>
                 </view>
+            </view>
+			<view class="titleBg u-m-t-40">
+				常用工具
+			</view>
+            <!--常用工具-->
+            <view class="u-padding-10 coreshop-bg-white u-margin-top-30 coreshop-user-info-tools-box">
                 <view class="coreshop-tools-list-box">
                     <u-grid :col="4" :border="false">
-                        <!-- <u-grid-item @tap="$u.throttle(goDistributionPanel, 500)" v-if="isDistribution">
-                            <u-icon name="wifi" :size="50" color="#666"></u-icon>
-                            <view class="grid-text">分销中心</view>
-                        </u-grid-item> -->
-                       <!-- <u-grid-item @tap="$u.throttle(goAgentPanel, 500)" v-if="isAgent">
-                            <u-icon name="zhuanfa" :size="50" color="#666"></u-icon>
-                            <view class="grid-text">代理中心</view>
-                        </u-grid-item> -->
-                        <u-grid-item v-for="(item,i) in utilityMenus" :key="i" @click="navigateToHandle(item.router)">
-                            <u-icon :name="item.icon" :size="50"  color="#666"></u-icon>
+                        <u-grid-item 
+						bgColor="rgba(0,0,0,0)"
+						style="background: none;"
+						v-for="(item,i) in utilityMenus" :key="i" @click="navigateToHandle(item.router)">
+                            <u-icon :name="item.icon" :size="item.name=='地址管理'?45:item.name=='我的特权'?60:50"  color="#fff"></u-icon>
                             <view class="grid-text">{{ item.name }}</view>
                         </u-grid-item>
                     </u-grid>
 
                 </view>
             </view>
-
-            <!--增值业务-->
-         <!--   <view class="u-padding-10 coreshop-bg-white u-margin-top-30 coreshop-user-info-tools-box">
-                <view class="u-padding-20 tools-view">
-                    <view class="coreshop-text-black coreshop-text-bold u-font-lg tools-title">增值业务</view>
-                </view>
-                <view class="coreshop-tools-list-box">
-                    <u-grid :col="4" :border="false">
-                        <u-grid-item v-for="(item,i) in vas" :key="i" v-if="item.showItem" @click="goRoute(item.router)">
-                            <u-icon :name="item.icon" :size="50" color="#666"></u-icon>
-                            <view class="grid-text">{{ item.name }}</view>
-                        </u-grid-item>
-                    </u-grid>
-                </view>
-            </view> -->
-
-            <!--其他-->
-          <!--  <view class="u-padding-10 coreshop-bg-white u-margin-top-30 coreshop-user-info-tools-box">
-                <view class="u-padding-20 tools-view">
-                    <view class="coreshop-text-black coreshop-text-bold u-font-lg tools-title">其他</view>
-                </view>
-                <view class="coreshop-tools-list-box">
-
-                    <u-grid :col="4" :border="false">
-                        <u-grid-item @click="goArticleList()">
-                            <u-icon name="question-circle" :size="50" color="#666"></u-icon>
-                            <view class="grid-text">帮助中心</view>
-                        </u-grid-item>
-
-                        <u-grid-item v-for="(item,i) in other" :key="i" v-if="item.showItem" @click="navigateToHandle(item.router)">
-                            <u-icon :name="item.icon" :size="50" color="#666"></u-icon>
-                            <view class="grid-text">{{ item.name }}</view>
-                        </u-grid-item> -->
-                        <!-- #ifdef H5 || APP-PLUS || APP-PLUS-NVUE -->
-                      <!--  <u-grid-item @click="showChat">
-                            <u-icon name="server-man" :size="50" color="#666"></u-icon>
-                            <view class="grid-text">联系客服</view>
-                        </u-grid-item> -->
-                        <!-- #endif -->
-                        <!-- #ifdef MP-WEIXIN -->
-                        <!-- todo:: 微信客服 -->
-                        <!-- #endif -->
-                        <!-- #ifdef MP-TOUTIAO -->
-                        <!-- todo:: 头条客服 -->
-                        <!-- #endif -->
-                        <!-- #ifdef MP-ALIPAY -->
-                        <!-- todo:: 支付宝客服 -->
-                        <!-- #endif -->
-
-               <!--     </u-grid>
-                </view>
-            </view> -->
-
+			<!-- 广告位 -->
+			<view class="advanter">
+				<swiper class="advanter" :indicator-dots="false" :autoplay="true" :interval="3000" :duration="1000">
+					<swiper-item v-for="item in 3">
+						<view class="swiper-item"></view>
+					</swiper-item>
+				</swiper>
+			</view>
         </view>
          <!--版权组件-->
         <copyright></copyright>
@@ -278,25 +177,25 @@
                 utilityMenus: {
                     myCoupon: {
                         name: '活动预约',
-                        icon: 'home',
+                        icon: 'clock',
                         router: '/pages/member/coupon/index',
                         showItem: true
                     },
                     myAddress: {
                         name: '地址管理',
-                        icon: 'map',
+                        icon: require('@/static/images/common/adress.png'),
                         router: '/pages/member/address/list/list',
                         showItem: true
                     },
                     myQuestion: {
                         name: '反馈建议',
-                        icon: 'question-circle',
+                        icon: 'edit-pen',
                         router: '/pages/article/list/list',
                         showItem: true
                     },
                     myPrivilege: {
                         name: '我的特权',
-                        icon: 'question-circle',
+                        icon: require('@/static/images/common/level.png'),
                         router: '/pages/member/address/list/list',
                         showItem: true
                     },

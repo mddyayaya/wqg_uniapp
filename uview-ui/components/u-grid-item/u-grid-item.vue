@@ -27,7 +27,7 @@
 			// 背景颜色
 			bgColor: {
 				type: String,
-				default: '#ffffff'
+				default: ''
 			},
 			// 点击时返回的index
 			index: {
